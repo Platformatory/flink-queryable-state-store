@@ -44,9 +44,7 @@ services:
 
 
   flink-jobmanager:
-    build: 
-      context: .
-      dockerfile: Dockerfile-flink-1.17
+    build: .
     command: jobmanager
     ports:
       - "8081:8081"
@@ -60,9 +58,7 @@ services:
       - ./flink-job/target:/opt/flink/usrlib
 
   flink-taskmanager:
-    build: 
-      context: .
-      dockerfile: Dockerfile-flink-1.17
+    build: .
     command: taskmanager
     environment:
       - |
@@ -91,44 +87,3 @@ services:
     depends_on:
       - flink-taskmanager
       - submit
-
-  # jobmanager:
-  #   build: .
-  #   ports:
-  #     - "8081:8081"
-  #   command: jobmanager
-  #   volumes:
-  #     - ./code:/opt/flink/code
-  #   environment:
-  #     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-  #     - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-  #     - |
-  #       FLINK_PROPERTIES=
-  #       jobmanager.rpc.address: jobmanager
-  #       s3.access.key: ${AWS_ACCESS_KEY_ID}
-  #       s3.secret.key: ${AWS_SECRET_ACCESS_KEY}
-  #       s3.endpoint.region: ap-south-1
-  #       s3.aws.credentials.provider: com.amazonaws.auth.DefaultAWSCredentialsProviderChain
-  #       classloader.check-leaked-classloader: false      
-
-  # taskmanager:
-  #   build: .
-  #   depends_on:
-  #     - jobmanager
-  #   command: taskmanager
-  #   scale: 1
-  #   volumes:
-  #     - ./code:/opt/flink/code
-  #   environment:
-  #     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-  #     - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-  #     - |
-  #       FLINK_PROPERTIES=
-  #       jobmanager.rpc.address: jobmanager
-  #       s3.access.key: ${AWS_ACCESS_KEY_ID}
-  #       s3.secret.key: ${AWS_SECRET_ACCESS_KEY}
-  #       s3.endpoint.region: ap-south-1
-  #       s3.aws.credentials.provider: com.amazonaws.auth.DefaultAWSCredentialsProviderChain
-  #       classloader.check-leaked-classloader: false  
-
-  
