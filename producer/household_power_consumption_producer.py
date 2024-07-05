@@ -1,6 +1,7 @@
 import json
 from kafka import KafkaProducer
 import os
+import random
 
 # Initialize Kafka producer
 broker = os.getenv('KAFKA_BROKER', 'broker:29092')
@@ -13,6 +14,7 @@ topic = 'household_power_consumption'
 
 # Path to the data file
 file_path = 'household_power_consumption.txt'
+
 
 # Define the field names based on the file structure
 field_names = [
@@ -31,9 +33,22 @@ with open(file_path, 'r') as file:
         
         # Create a dictionary from field names and values
         message = dict(zip(field_names, values))
+
+        household_name = b'household_1'
+
+        message['household'] = "household_1"
         
-        # Produce a message for each line
-        producer.send(topic, message)
+        # Produce a message for each line with the household name as the key
+        producer.send(topic, key=household_name, value=message)
+        producer.flush()  # Ensure the message is sent
+
+        household_name = b'household_2'
+
+        message['household'] = "household_2"
+        message['voltage'] = float(message['voltage']) + round(random.uniform(100,200), 3)
+
+        # Produce a message for each line with the household name as the key
+        producer.send(topic, key=household_name, value=message)
         producer.flush()  # Ensure the message is sent
 
 # Close the producer

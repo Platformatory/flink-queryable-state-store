@@ -2,12 +2,14 @@ package com.platformatory;
 
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 // import org.apache.flink.api.common.time.Time;
+import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
+import org.apache.flink.streaming.util.serialization.JSONKeyValueDeserializationSchema;
 
 import java.util.Properties;
 
@@ -43,7 +45,7 @@ public class KafkaFlinkJob {
                 properties);
 
         env.addSource(kafkaSource)
-                .keyBy(value -> "static_key")
+                .keyBy((KeySelector<SensorReading, String>) SensorReading::getHousehold)
                 .process(new AverageVoltageProcessFunction())
                 .addSink(kafkaSink);
 

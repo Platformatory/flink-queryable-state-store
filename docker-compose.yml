@@ -1,7 +1,5 @@
 version: '3.7'
 services:
-
-
   broker:
     image: confluentinc/cp-kafka:7.5.0
     hostname: broker
@@ -9,6 +7,11 @@ services:
     ports:
       - "9092:9092"
       - "9101:9101"
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'test-message' | kafka-console-producer.sh --broker-list localhost:9092 --topic health-check-topic && kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic health-check-topic --from-beginning --max-messages 1 | grep 'test-message'"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
@@ -70,11 +73,24 @@ services:
     depends_on:
       - flink-jobmanager
 
+  submit:
+    image: flink:1.17.1
+    depends_on:
+      - flink-jobmanager
+      - flink-taskmanager
+      - producer
+    entrypoint: [ "/bin/sh", "-c", "flink run --jobmanager flink-jobmanager:8081 -d -c com.platformatory.KafkaFlinkJob /opt/flink/usrlib/flink-job-1.0-SNAPSHOT.jar" ]
+    volumes:
+      - ./flink-job/target:/opt/flink/usrlib
+
   query-client:
     build: state-query-client
     ports:
       - "8080:8080"
-    entrypoint: ["java", "-cp", "FlinkStateQueryClient-1.0-SNAPSHOT.jar", "com.platformatory.RestServer", "flink-taskmanager", "9069", "2610d6306b11797b154ba5bfaa0ba779", "8080"]
+    entrypoint: ["java", "-cp", "FlinkStateQueryClient-1.0-SNAPSHOT.jar", "com.platformatory.RestServer", "flink-taskmanager", "9069", "b381e79057554a79785e6825c4399df5", "8080"]
+    depends_on:
+      - flink-taskmanager
+      - submit
 
   # jobmanager:
   #   build: .
