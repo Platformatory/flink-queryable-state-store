@@ -17,6 +17,7 @@ public class AverageVoltageProcessFunction extends KeyedProcessFunction<String, 
     public void open(org.apache.flink.configuration.Configuration parameters) {
         ValueStateDescriptor<Tuple2<Double, Integer>> descriptor =
                 new ValueStateDescriptor<>("voltageState", Types.TUPLE(Types.DOUBLE, Types.INT));
+        descriptor.setQueryable("average-voltage-query");
         voltageState = getRuntimeContext().getState(descriptor);
     }
 

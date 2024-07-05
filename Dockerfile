@@ -1,6 +1,6 @@
 FROM flink:1.19.1-scala_2.12
 RUN echo "Downloading https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka/3.2.0-1.19/flink-sql-connector-kafka-3.2.0-1.19.jar" && \
-  wget -q -O /opt/flink/lib/fflink-sql-connector-kafka-3.2.0-1.19.jar https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka/3.2.0-1.19/flink-sql-connector-kafka-3.2.0-1.19.jar
+  wget -q -O /opt/flink/lib/flink-sql-connector-kafka-3.2.0-1.19.jar https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka/3.2.0-1.19/flink-sql-connector-kafka-3.2.0-1.19.jar
 # Install Python and pyflink .
 RUN apt-get update && \
   apt-get install -y build-essential libssl-dev zlib1g-dev liblzma-dev libbz2-dev libffi-dev && \

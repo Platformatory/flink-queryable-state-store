@@ -16,6 +16,9 @@ public class KafkaFlinkJob {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
+        env.getConfig().setLatencyTrackingInterval(5);  // enable latency tracking
+        env.getConfig().setAutoWatermarkInterval(1000);
+
         Properties properties = new Properties();
         properties.setProperty("bootstrap.servers", "broker:29092");
         properties.setProperty("group.id", "flink_group");

@@ -41,22 +41,35 @@ services:
 
 
   flink-jobmanager:
-    image: flink:1.18.1
+    build: 
+      context: .
+      dockerfile: Dockerfile-flink-1.17
     command: jobmanager
     ports:
       - "8081:8081"
+      - "9069:9069"
     environment:
-      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        queryable-state.enable: true
     volumes:
       - ./flink-job/target:/opt/flink/usrlib
 
   flink-taskmanager:
-    image: flink:1.18.1
+    build: 
+      context: .
+      dockerfile: Dockerfile-flink-1.17
     command: taskmanager
     environment:
-      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        queryable-state.enable: true
+
     depends_on:
       - flink-jobmanager
+
   # jobmanager:
   #   build: .
   #   ports:
