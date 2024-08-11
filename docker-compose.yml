@@ -70,7 +70,7 @@ services:
       - flink-jobmanager
 
   submit:
-    image: flink:1.17.1
+    image: flink:1.19.1
     depends_on:
       - flink-jobmanager
       - flink-taskmanager
@@ -83,6 +83,6 @@ services:
     build: state-query-client
     ports:
       - "8080:8080"
-    entrypoint: ["java", "-cp", "FlinkStateQueryClient-1.0-SNAPSHOT.jar", "com.platformatory.RestServer", "flink-taskmanager", "9069", "6f9f1b29546e3c716c514dada45e3d54", "8080"]
+    entrypoint: ["java", "-cp", "FlinkStateQueryClient-1.0-SNAPSHOT.jar", "com.platformatory.RestServer", "flink-taskmanager", "9069", "cf29cd5888a6e1a6ad6a8adbf6d000d4", "8080"]
     depends_on:
       - flink-taskmanager
