@@ -38,6 +38,6 @@
   </build>
   <properties>
     <java.version>11</java.version>
-    <flink.version>1.17.1</flink.version>
+    <flink.version>1.19.1</flink.version>
   </properties>
 </project>

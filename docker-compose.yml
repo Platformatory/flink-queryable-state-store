@@ -83,6 +83,6 @@ services:
     build: state-query-client
     ports:
       - "8080:8080"
-    entrypoint: ["java", "-cp", "FlinkStateQueryClient-1.0-SNAPSHOT.jar", "com.platformatory.RestServer", "flink-taskmanager", "9069", "cf29cd5888a6e1a6ad6a8adbf6d000d4", "8080"]
+    entrypoint: ["java", "-cp", "FlinkStateQueryClient-1.0-SNAPSHOT.jar", "com.platformatory.RestServer", "flink-taskmanager", "9069", "flinkJobID", "8080"]
     depends_on:
       - flink-taskmanager
